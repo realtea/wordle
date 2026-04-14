@@ -276,8 +276,8 @@ app.prepare().then(() => {
   expressApp.all("/{*path}", (req: any, res: any) => handle(req, res));
 
   const port = parseInt(process.env.PORT || "3000", 10);
-  httpServer.listen(port, () => {
-    console.log(`> Ready on http://localhost:${port}`);
+  httpServer.listen(port, "0.0.0.0", () => {
+    console.log(`> Ready on http://0.0.0.0:${port}`);
   });
 });
 
