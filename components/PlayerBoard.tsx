@@ -11,12 +11,13 @@ interface GuessEntry {
 interface PlayerBoardProps {
   label: string;
   guesses: GuessEntry[];
-  currentGuess: string;       // only for local player
+  currentGuess: string;
   currentRow: number;
   maxGuesses: number;
   isLocal: boolean;
   solved: boolean;
-  shakingRow: number | null;  // only for local player
+  shakingRow: number | null;
+  revealLetters: boolean;  // false = hide letters on opponent board during game
 }
 
 export default function PlayerBoard({
@@ -28,6 +29,7 @@ export default function PlayerBoard({
   isLocal,
   solved,
   shakingRow,
+  revealLetters,
 }: PlayerBoardProps) {
   const rows = [];
 
@@ -40,7 +42,9 @@ export default function PlayerBoard({
       let revealed = false;
 
       if (r < guesses.length) {
-        letter = guesses[r].word[c].toUpperCase();
+        // Show the actual letter only if this is the local player OR letters are revealed (game over)
+        const showLetter = isLocal || revealLetters;
+        letter = showLetter ? guesses[r].word[c].toUpperCase() : "";
         status = guesses[r].result[c];
         revealed = true;
       } else if (isLocal && r === currentRow) {

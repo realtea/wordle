@@ -359,9 +359,7 @@ export default function MultiplayerGame({ roomCode, playerName, isJoining }: Mul
       {gameOver && secretWords.length === 2 && (
         <div className="text-center mb-2">
           <p className="text-[11px] text-neutral-400">
-            Your word: <span className="text-white font-bold uppercase">{secretWords[localIndex]}</span>
-            {" | "}
-            Their word: <span className="text-white font-bold uppercase">{secretWords[opponentIndex]}</span>
+            The word was: <span className="text-white font-bold uppercase">{secretWords[0]}</span>
           </p>
           <div className="flex gap-3 justify-center mt-2">
             {!playAgainSent ? (
@@ -402,9 +400,10 @@ export default function MultiplayerGame({ roomCode, playerName, isJoining }: Mul
           isLocal={true}
           solved={localSolved}
           shakingRow={shakingRow}
+          revealLetters={true}
         />
 
-        {/* Opponent board */}
+        {/* Opponent board — hide letters until game over */}
         <PlayerBoard
           label={opponentPlayer?.name || "Opponent"}
           guesses={guesses[opponentIndex] || []}
@@ -414,6 +413,7 @@ export default function MultiplayerGame({ roomCode, playerName, isJoining }: Mul
           isLocal={false}
           solved={opponentSolved}
           shakingRow={null}
+          revealLetters={gameOver}
         />
       </div>
 

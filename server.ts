@@ -2,7 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import next from "next";
 import { Server, Socket } from "socket.io";
-import { WORDS, VALID_GUESSES } from "./lib/words.js";
+import { SECRET_WORDS, VALID_GUESSES } from "./lib/words.js";
 
 // ── evaluate (duplicated from lib so server can run standalone) ──
 type LetterStatus = "correct" | "present" | "absent";
@@ -32,7 +32,7 @@ function evaluateGuess(guess: string, target: string): LetterStatus[] {
 }
 
 function pickWord(): string {
-  return WORDS[Math.floor(Math.random() * WORDS.length)];
+  return SECRET_WORDS[Math.floor(Math.random() * SECRET_WORDS.length)];
 }
 
 function generateRoomCode(): string {
@@ -282,15 +282,13 @@ app.prepare().then(() => {
 });
 
 function startGame(room: Room, io: Server) {
-  // Pick unique secret words for each player
-  const word1 = pickWord();
-  let word2 = pickWord();
-  while (word2 === word1) word2 = pickWord();
+  // Both players get the same secret word
+  const word = pickWord();
 
-  room.players[0].secretWord = word1;
+  room.players[0].secretWord = word;
   room.players[0].guesses = [];
   room.players[0].solved = false;
-  room.players[1].secretWord = word2;
+  room.players[1].secretWord = word;
   room.players[1].guesses = [];
   room.players[1].solved = false;
   room.started = true;
